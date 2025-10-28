@@ -39,7 +39,7 @@ Instalación
 
 Clonar el repositorio:
 
-git clone https://github.com/tuusuario/PreEntrega1-Backend.git
+git clone https://github.com/franchuperez/Proyectos-curso-Backend.git
 cd PreEntrega1-Backend
 
 
