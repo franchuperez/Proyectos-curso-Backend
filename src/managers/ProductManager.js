@@ -35,36 +35,31 @@ async getById(pid) {
 }
 
 async addProduct(productData) {
-    const required = ['title','description','code','price','status','stock','category','thumbnails'];
-    for (const field of required) {
-    if (productData[field] === undefined) {
-        throw new Error(`Falta campo obligatorio: ${field}`);
-    }
-    }
-
     const products = await this.#readFile();
 
-
-    if (products.some(p => p.code === productData.code)) {
-    throw new Error('El código del producto ya existe');
-    }
-
+    // Si vienen pocos campos desde WebSocket, generamos valores por defecto
     const newProduct = {
-    id: uuidv4(),
-    title: String(productData.title),
-    description: String(productData.description),
-    code: String(productData.code),
-    price: Number(productData.price),
-    status: Boolean(productData.status),
-    stock: Number(productData.stock),
-    category: String(productData.category),
-    thumbnails: Array.isArray(productData.thumbnails) ? productData.thumbnails : []
+        id: uuidv4(),
+        title: productData.title ?? "Sin título",
+        description: productData.description ?? "",
+        code: productData.code ?? uuidv4().slice(0, 6),
+        price: Number(productData.price ?? 0),
+        status: productData.status !== undefined ? Boolean(productData.status) : true,
+        stock: Number(productData.stock ?? 0),
+        category: productData.category ?? "general",
+        thumbnails: Array.isArray(productData.thumbnails) ? productData.thumbnails : []
     };
+
+    // Verificar código duplicado
+    if (products.some(p => p.code === newProduct.code)) {
+        throw new Error("El código del producto ya existe");
+    }
 
     products.push(newProduct);
     await this.#writeFile(products);
     return newProduct;
 }
+
 
 async updateProduct(pid, fieldsToUpdate) {
     const products = await this.#readFile();
