@@ -1,0 +1,15 @@
+[
+{
+    "id": "b1f51f58-d780-4095-94de-63f36d49dd30",
+    "title": "Aceite 10W40",
+    "description": "Aceite sintético premium",
+    "code": "OIL-001",
+    "price": 9000,
+    "status": true,
+    "stock": 20,
+    "category": "Lubricantes",
+    "thumbnails": [
+    "img/aceite.jpg"
+    ]
+}
+]

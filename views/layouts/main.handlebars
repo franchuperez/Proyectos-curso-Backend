@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Online</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      background: #444;
+      padding: 0.5rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+    }
+
+    nav a:hover {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    main {
+      min-height: calc(100vh - 200px);
+      padding: 20px;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛒 Tienda Online - E-commerce</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Productos</a></li>
+      <li><a href="/realtimeproducts">Tiempo Real</a></li>
+      <li><a href="#" onclick="viewCart(); return false;">🛒 Mi Carrito</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    {{{body}}}
+ </main>
+
+<footer>
+    <p>&copy; 2025 E-commerce - Proyecto Backend</p>
+</footer>
+
+<script>
+    function viewCart() {
+    const cartId = localStorage.getItem('cartId');
+    if (cartId) {
+        window.location.href = `/carts/${cartId}`;
+    } else {
+        alert('No tienes productos en el carrito aún');
+    }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<div class="container">
+  <h1>Mi Carrito</h1>
+  
+  {{#if products.length}}
+    <div class="cart-items">
+      {{#each products}}
+        <div class="cart-item">
+          <div class="item-info">
+            <h3>{{this.product.title}}</h3>
+            <p>{{this.product.description}}</p>
+            <p><strong>Precio unitario:</strong> ${{this.product.price}}</p>
+            <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+            <p><strong>Subtotal:</strong> ${{multiply this.product.price this.quantity}}</p>
+          </div>
+          
+          <div class="item-actions">
+            <button class="btn btn-warning" onclick="updateQuantity('{{../cartId}}', '{{this.product._id}}')">
+              Actualizar cantidad
+            </button>
+            <button class="btn btn-danger" onclick="removeFromCart('{{../cartId}}', '{{this.product._id}}')">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    
+    <div class="cart-summary">
+      <h3>Total: $<span id="total">{{calculateTotal products}}</span></h3>
+      <button class="btn btn-danger" onclick="clearCart('{{cartId}}')">
+        Vaciar carrito
+      </button>
+    </div>
+  {{else}}
+    <p class="empty-cart">El carrito está vacío</p>
+  {{/if}}
+  
+  <a href="/products" class="btn btn-secondary">Seguir comprando</a>
+</div>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .cart-items {
+    margin: 20px 0;
+  }
+  
+  .cart-item {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .item-info h3 {
+    margin-top: 0;
+  }
+  
+  .item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cart-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: right;
+  }
+  
+  .empty-cart {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin: 40px 0;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  .btn-warning {
+    background: #ffc107;
+    color: #000;
+  }
+  
+  .btn-danger {
+    background: #dc3545;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+    margin-top: 20px;
+  }
+</style>
+
+<script>
+  async function removeFromCart(cartId, productId) {
+    try {
+      const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        location.reload();
+      }
+    } catch (error) {
+      alert('Error al eliminar producto');
+    }
+  }
+  
+  async function updateQuantity(cartId, productId) {
+    const quantity = prompt('Ingrese la nueva cantidad:');
+    if (!quantity || quantity < 1) return;
+    
+    try {
+      const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantity: parseInt(quantity) })
+      });
+      
+      if (response.ok) {
+        location.reload();
+      }
+    } catch (error) {
+      alert('Error al actualizar cantidad');
+    }
+  }
+  
+  async function clearCart(cartId) {
+    if (!confirm('¿Desea vaciar el carrito?')) return;
+    
+    try {
+    const response = await fetch(`/api/carts/${cartId}`, {
+        method: 'DELETE'
+    });
+    
+    if (response.ok) {
+        location.reload();
+    }
+    } catch (error) {
+    alert('Error al vaciar carrito');
+    }
+}
+</script>
